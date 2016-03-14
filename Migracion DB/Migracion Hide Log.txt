@@ -1,0 +1,690 @@
+Starting
+
+Starting...
+Connect to source DBMS...
+- Connecting to source...
+Connecting to Mysql@localhost:3306...
+Connected to Mysql@localhost:3306, 5.7.11-log
+Connect to source DBMS done
+Check target DBMS connection...
+- Connecting to target...
+Connecting to Mysql@127.0.0.1:3308...
+Connected
+Check target DBMS connection done
+Retrieve schema list from source....
+- Checking connection...
+- Fetching schema names...
+- Finished
+Retrieve schema list from source finished
+Finished performing tasks.
+
+--------------------------------------------------------------------------
+
+Starting...
+Connect to source DBMS...
+- Connecting...
+Connecting to Mysql@localhost:3306...
+Connected to Mysql@localhost:3306, 5.7.11-log
+Connect to source DBMS done
+Reverse engineer selected schemas....
+Reverse engineering prueba_pleisi from def
+- Preparing...
+- Preparing...
+Reverse engineering tables from prueba_pleisi
+- Retrieving table prueba_pleisi.clientes...
+- Reverse engineering prueba_pleisi.clientes...
+- Retrieving table prueba_pleisi.compras...
+- Reverse engineering prueba_pleisi.compras...
+- Retrieving table prueba_pleisi.log...
+- Reverse engineering prueba_pleisi.log...
+- Retrieving table prueba_pleisi.productos...
+- Reverse engineering prueba_pleisi.productos...
+- Retrieving table prueba_pleisi.sedes...
+- Reverse engineering prueba_pleisi.sedes...
+Reverse engineering triggers from prueba_pleisi
+Reverse engineering stored procedures from prueba_pleisi
+Reverse engineering functions from prueba_pleisi
+- Reverse engineered 5 objects
+Reverse engineer selected schemas finished
+Post-processing of reverse engineered schemas...
+Post-processing of reverse engineered schemas done
+Finished performing tasks.
+
+----------------------------------------------------------------------
+
+Starting...
+Migrate Selected Objects....
+- Migrating...
+- Migrating schema prueba_pleisi...
+- Migrating schema contents for schema prueba_pleisi
+- Table prueba_pleisi.clientes migrated
+- Table prueba_pleisi.compras migrated
+- Table prueba_pleisi.log migrated
+- Table prueba_pleisi.productos migrated
+- Table prueba_pleisi.sedes migrated
+- Finalizing foreign key migration...
+- Migration finished
+Migrate Selected Objects finished
+Generate SQL CREATE Statements....
+- Generating SQL...
+Generate SQL CREATE Statements finished
+Finished performing tasks.
+
+
+----------------------------------------------------
+
+Starting...
+Create Script File...
+Create Script File done
+Connect to Target Database...
+Connect to Target Database done
+Perform Checks in Target...
+- Validating for existing schemas on target MySQL Server...
+Perform Checks in Target done
+Create Schemas and Objects....
+================================================================================
+
+- Creating schema in target MySQL server at Mysql@127.0.0.1:3308...
+- Executing preamble script...
+Execute statement: SET FOREIGN_KEY_CHECKS = 0
+- Creating schema prueba_pleisi...
+Execute statement: DROP SCHEMA IF EXISTS `prueba_pleisi` 
+Execute statement: 
+    
+    CREATE SCHEMA IF NOT EXISTS `prueba_pleisi` 
+- Creating table prueba_pleisi.clientes
+Execute statement: 
+    CREATE TABLE IF NOT EXISTS `prueba_pleisi`.`clientes` (
+      `id` INT(11) NOT NULL AUTO_INCREMENT,
+      `documento` INT(11) NULL DEFAULT NULL,
+      `nombres` VARCHAR(80) NULL DEFAULT NULL,
+      `detalles` TEXT NULL DEFAULT NULL,
+      PRIMARY KEY (`id`))
+    ENGINE = InnoDB
+    AUTO_INCREMENT = 10
+    DEFAULT CHARACTER SET = latin1
+- Creating table prueba_pleisi.compras
+Execute statement: 
+    CREATE TABLE IF NOT EXISTS `prueba_pleisi`.`compras` (
+      `id` INT(11) NOT NULL AUTO_INCREMENT,
+      `id_cliente` INT(11) NULL DEFAULT NULL,
+      `id_producto` INT(11) NULL DEFAULT NULL,
+      `id_sede` INT(11) NULL DEFAULT NULL,
+      `precio` INT(11) NULL DEFAULT NULL,
+      `descripcion` TEXT NULL DEFAULT NULL,
+      `fecha` DATETIME NULL DEFAULT NULL,
+      PRIMARY KEY (`id`),
+      INDEX `id_cliente` (`id_cliente` ASC),
+      INDEX `id_producto` (`id_producto` ASC),
+      INDEX `id_sede` (`id_sede` ASC),
+      CONSTRAINT `compras_ibfk_1`
+        FOREIGN KEY (`id_cliente`)
+        REFERENCES `prueba_pleisi`.`clientes` (`id`),
+      CONSTRAINT `compras_ibfk_2`
+        FOREIGN KEY (`id_producto`)
+        REFERENCES `prueba_pleisi`.`productos` (`id`),
+      CONSTRAINT `compras_ibfk_3`
+        FOREIGN KEY (`id_sede`)
+        REFERENCES `prueba_pleisi`.`sedes` (`id`))
+    ENGINE = InnoDB
+
+---------------------------------------------------------------------------
+
+Starting...
+Prepare information for data copy...
+Prepare information for data copy done
+Determine number of rows to copy....
+Counting number of rows in tables...
+wbcopytables.exe --count-only --passwords-from-stdin --mysql-source="root@localhost:3306" --table-file=c:\users\vaesoft\appdata\local\temp\tmprt_tki
+11:50:04 [INF][      copytable]: --table `prueba_pleisi`	`productos`
+11:50:04 [INF][      copytable]: --table `prueba_pleisi`	`log`
+11:50:04 [INF][      copytable]: --table `prueba_pleisi`	`clientes`
+11:50:04 [INF][      copytable]: --table `prueba_pleisi`	`compras`
+11:50:04 [INF][      copytable]: --table `prueba_pleisi`	`sedes`
+11:50:04 [INF][      copytable]: Connecting to MySQL server at localhost:3306 with user root
+11:50:04 [INF][      copytable]: Connection to MySQL opened
+
+40 total rows in 5 tables need to be copied:
+- `prueba_pleisi`.`productos`: 5
+- `prueba_pleisi`.`log`: 0
+- `prueba_pleisi`.`clientes`: 9
+- `prueba_pleisi`.`compras`: 23
+- `prueba_pleisi`.`sedes`: 3
+Determine number of rows to copy finished
+Copy data to target RDBMS....
+
+Migrating data...
+wbcopytables.exe --mysql-source="root@localhost:3306" --target="root@127.0.0.1:3308" --progress --passwords-from-stdin --thread-count=2 --source-rdbms-type=Mysql --table-file=c:\users\vaesoft\appdata\local\temp\tmpxgg2dn
+Loading table information from file c:\users\vaesoft\appdata\local\temp\tmpxgg2dn
+
+`prueba_pleisi`.`log`:Copying 3 columns of 0 rows from table `prueba_pleisi`.`log`
+`prueba_pleisi`.`productos`:Copying 4 columns of 5 rows from table `prueba_pleisi`.`productos`
+`prueba_pleisi`.`log`:Finished copying 0 rows in 0m00s
+`prueba_pleisi`.`clientes`:Copying 4 columns of 9 rows from table `prueba_pleisi`.`clientes`
+`prueba_pleisi`.`productos`:Finished copying 5 rows in 0m00s
+`prueba_pleisi`.`clientes`:Finished copying 9 rows in 0m00s
+`prueba_pleisi`.`compras`:Copying 7 columns of 23 rows from table `prueba_pleisi`.`compras`
+`prueba_pleisi`.`sedes`:Copying 3 columns of 3 rows from table `prueba_pleisi`.`sedes`
+`prueba_pleisi`.`sedes`:Finished copying 3 rows in 0m00s
+`prueba_pleisi`.`compras`:Finished copying 23 rows in 0m00s
+FINISHED
+
+--table `prueba_pleisi`	`productos`	`prueba_pleisi`	`productos`	`id`	`id`	`id`, `producto`, `precio`, `descripcion`
+
+11:50:05 [INF][      copytable]: --table `prueba_pleisi`	`log`	`prueba_pleisi`	`log`	`id`	`id`	`id`, `fecha`, `descripcion`
+
+11:50:05 [INF][      copytable]: --table `prueba_pleisi`	`clientes`	`prueba_pleisi`	`clientes`	`id`	`id`	`id`, `documento`, `nombres`, `detalles`
+
+11:50:05 [INF][      copytable]: --table `prueba_pleisi`	`compras`	`prueba_pleisi`	`compras`	`id`	`id`	`id`, `id_cliente`, `id_producto`, `id_sede`, `precio`, `descripcion`, `fecha`
+
+11:50:05 [INF][      copytable]: --table `prueba_pleisi`	`sedes`	`prueba_pleisi`	`sedes`	`id`	`id`	`id`, `sede`, `direccion`
+
+11:50:05 [INF][      copytable]: Connecting to MySQL server at 127.0.0.1:3308 with user root
+
+11:50:05 [INF][      copytable]: Connection to MySQL opened
+
+--------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+Starting...
+Prepare information for data copy...
+Prepare information for data copy done
+Determine number of rows to copy....
+Counting number of rows in tables...
+wbcopytables.exe --count-only --passwords-from-stdin --mysql-source="root@localhost:3306" --table-file=c:\users\vaesoft\appdata\local\temp\tmpaft73p
+11:54:56 [INF][      copytable]: --table `prueba_pleisi`	`productos`
+11:54:56 [INF][      copytable]: --table `prueba_pleisi`	`log`
+11:54:56 [INF][      copytable]: --table `prueba_pleisi`	`clientes`
+11:54:56 [INF][      copytable]: --table `prueba_pleisi`	`compras`
+11:54:56 [INF][      copytable]: --table `prueba_pleisi`	`sedes`
+11:54:56 [INF][      copytable]: Connecting to MySQL server at localhost:3306 with user root
+11:54:56 [INF][      copytable]: Connection to MySQL opened
+
+40 total rows in 5 tables need to be copied:
+- `prueba_pleisi`.`productos`: 5
+- `prueba_pleisi`.`log`: 0
+- `prueba_pleisi`.`clientes`: 9
+- `prueba_pleisi`.`compras`: 23
+- `prueba_pleisi`.`sedes`: 3
+Determine number of rows to copy finished
+Copy data to target RDBMS....
+
+Migrating data...
+wbcopytables.exe --mysql-source="root@localhost:3306" --target="root@127.0.0.1:3308" --progress --passwords-from-stdin --thread-count=2 --source-rdbms-type=Mysql --table-file=c:\users\vaesoft\appdata\local\temp\tmp3el5a8
+Loading table information from file c:\users\vaesoft\appdata\local\temp\tmp3el5a8
+
+`prueba_pleisi`.`productos`:Copying 4 columns of 5 rows from table `prueba_pleisi`.`productos`
+`prueba_pleisi`.`log`:Copying 3 columns of 0 rows from table `prueba_pleisi`.`log`
+`prueba_pleisi`.`log`:Finished copying 0 rows in 0m00s
+`prueba_pleisi`.`productos`:Finished copying 5 rows in 0m00s
+`prueba_pleisi`.`compras`:Copying 7 columns of 23 rows from table `prueba_pleisi`.`compras`
+`prueba_pleisi`.`clientes`:Copying 4 columns of 9 rows from table `prueba_pleisi`.`clientes`
+`prueba_pleisi`.`compras`:Finished copying 23 rows in 0m00s
+`prueba_pleisi`.`sedes`:Copying 3 columns of 3 rows from table `prueba_pleisi`.`sedes`
+`prueba_pleisi`.`clientes`:Finished copying 9 rows in 0m00s
+`prueba_pleisi`.`sedes`:Finished copying 3 rows in 0m00s
+FINISHED
+
+11:54:57 [INF][      copytable]: --table `prueba_pleisi`	`productos`	`prueba_pleisi`	`productos`	`id`	`id`	`id`, `producto`, `precio`, `descripcion`
+
+11:54:57 [INF][      copytable]: --table `prueba_pleisi`	`log`	`prueba_pleisi`	`log`	`id`	`id`	`id`, `fecha`, `descripcion`
+
+11:54:57 [INF][      copytable]: --table `prueba_pleisi`	`clientes`	`prueba_pleisi`	`clientes`	`id`	`id`	`id`, `documento`, `nombres`, `detalles`
+
+11:54:57 [INF][      copytable]: --table `prueba_pleisi`	`compras`	`prueba_pleisi`	`compras`	`id`	`id`	`id`, `id_cliente`, `id_producto`, `id_sede`, `precio`, `descripcion`, `fecha`
+
+11:54:57 [INF][      copytable]: --table `prueba_pleisi`	`sedes`	`prueba_pleisi`	`sedes`	`id`	`id`	`id`, `sede`, `direccion`
+
+11:54:57 [INF][      copytable]: Connecting to MySQL server at 127.0.0.1:3308 with user root
+
+11:54:57 [INF][      copytable]: Connection to MySQL opened
+
+11:54:57 [INF][      copytable]: Connecting to MySQL server at localhost:3306 with user root
+
+11:54:57 [INF][      copytable]: Connection to MySQL opened
+
+11:54:57 [INF][      copytable]: Connecting to MySQL server at 127.0.0.1:3308 with user root
+
+11:54:57 [INF][      copytable]: Connection to MySQL opened
+
+11:54:57 [INF][      copytable]: Connecting to MySQL server at localhost:3306 with user root
+
+11:54:57 [INF][      copytable]: Connection to MySQL opened
+
+11:54:57 [INF][      copytable]: Connecting to MySQL server at 127.0.0.1:3308 with user root
+
+11:54:57 [INF][      copytable]: Connection to MySQL opened
+
+11:54:57 [INF][      copytable]: Re-enabling triggers for schema 'prueba_pleisi'
+
+11:54:57 [INF][      copytable]: No triggers found for 'prueba_pleisi'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Copy helper has finished
+
+Data copy results:
+- `prueba_pleisi`.`productos` has succeeded (5 of 5 rows copied)
+- `prueba_pleisi`.`log` has succeeded (0 of 0 rows copied)
+- `prueba_pleisi`.`clientes` has succeeded (9 of 9 rows copied)
+- `prueba_pleisi`.`compras` has succeeded (23 of 23 rows copied)
+- `prueba_pleisi`.`sedes` has succeeded (3 of 3 rows copied)
+5 tables of 5 were fully copied
+Copy data to target RDBMS finished
+Finished performing tasks.
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+MySQL Workbench Migration Wizard Report
+
+Date: Mon Mar 14 11:55:54 2016
+Source: MySQL 5.7.11
+Target: MySQL 5.5.32
+------------------------------------------------------------------------------------
+
+I. Migration
+
+1. Summary
+
+Number of migrated schemas: 1
+
+1. prueba_pleisi
+Source Schema:   prueba_pleisi
+
+- Tables:             5
+- Triggers:           0
+- Views:              0
+- Stored Procedures:  0
+- Functions:          0
+
+
+2. Migration Issues
+
+
+3. Object Creation Issues
+
+
+4. Migration Details
+
+4.1. Table prueba_pleisi.clientes (clientes)
+
+Columns:
+  - id INT(11)    
+  - documento INT(11)  NULL  
+  - nombres VARCHAR(80)  NULL  
+  - detalles TEXT  NULL  
+
+Foreign Keys:
+
+Indices:
+  - PRIMARY (id)
+
+
+4.2. Table prueba_pleisi.compras (compras)
+
+Columns:
+  - id INT(11)    
+  - id_cliente INT(11)  NULL  
+  - id_producto INT(11)  NULL  
+  - id_sede INT(11)  NULL  
+  - precio INT(11)  NULL  
+  - descripcion TEXT  NULL  
+  - fecha DATETIME  NULL  
+
+Foreign Keys:
+  - compras_ibfk_1 (id_cliente) ON clientes (id)
+  - compras_ibfk_2 (id_producto) ON productos (id)
+  - compras_ibfk_3 (id_sede) ON sedes (id)
+
+Indices:
+  - PRIMARY (id)
+  - id_cliente (id_cliente)
+  - id_producto (id_producto)
+  - id_sede (id_sede)
+
+
+4.3. Table prueba_pleisi.log (log)
+
+Columns:
+  - id INT(11)    
+  - fecha DATETIME  NULL  
+  - descripcion TEXT  NULL  
+
+Foreign Keys:
+
+Indices:
+  - PRIMARY (id)
+
+
+4.4. Table prueba_pleisi.productos (productos)
+
+Columns:
+  - id INT(11)    
+  - producto VARCHAR(40)  NULL  
+  - precio INT(11)  NULL  
+  - descripcion TEXT  NULL  
+
+Foreign Keys:
+
+Indices:
+  - PRIMARY (id)
+
+
+4.5. Table prueba_pleisi.sedes (sedes)
+
+Columns:
+  - id INT(11)    
+  - sede VARCHAR(40)  NULL  
+  - direccion VARCHAR(40)  NULL  
+
+Foreign Keys:
+
+Indices:
+  - PRIMARY (id)
+
+
+II. Data Copy
+
+  - `prueba_pleisi`.`productos`
+            Succeeded : copied 5 of 5 rows from `prueba_pleisi`.`productos`            Succeeded : copied 5 of 5 rows from `prueba_pleisi`.`productos`    
+  - `prueba_pleisi`.`log`
+            Succeeded : copied 0 of 0 rows from `prueba_pleisi`.`log`            Succeeded : copied 0 of 0 rows from `prueba_pleisi`.`log`    
+  - `prueba_pleisi`.`clientes`
+            Succeeded : copied 9 of 9 rows from `prueba_pleisi`.`clientes`            Succeeded : copied 9 of 9 rows from `prueba_pleisi`.`clientes`    
+  - `prueba_pleisi`.`compras`
+            Succeeded : copied 23 of 23 rows from `prueba_pleisi`.`compras`            Succeeded : copied 23 of 23 rows from `prueba_pleisi`.`compras`    
+  - `prueba_pleisi`.`sedes`
+            Succeeded : copied 3 of 3 rows from `prueba_pleisi`.`sedes`            Succeeded : copied 3 of 3 rows from `prueba_pleisi`.`sedes`    
+
+
+
+
+---------------------------------------------------------------------------------------
+
+
+
